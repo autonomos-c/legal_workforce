@@ -9,6 +9,7 @@ from src.legal_agent_manager import LegalAgentManager, AgentType
 from src.director_agent import DirectorAgent
 from src.specialist_agent import SpecialistAgent
 from src.analyst_agent import AnalystAgent
+from src.case_manager_agent import CaseManagerAgent
 
 def setup_logging():
     logging.basicConfig(
@@ -26,9 +27,11 @@ def main():
     director = DirectorAgent()
     specialist = SpecialistAgent()
     analyst = AnalystAgent()
+    case_manager = CaseManagerAgent()
     manager.register_agent(AgentType.DIRECTOR, director)
     manager.register_agent(AgentType.SPECIALIST, specialist)
     manager.register_agent(AgentType.ANALYST, analyst)
+    manager.register_agent(AgentType.CASE_MANAGER, case_manager)
     
     # Test requests
     test_requests = [
@@ -43,6 +46,10 @@ def main():
         {
             "context": "Análisis de riesgos legales",
             "question": "¿Cuáles son los principales riesgos legales al implementar un sistema de IA en el sector financiero?"
+        },
+        {
+            "context": "Procedimiento judicial",
+            "question": "¿Cómo gestionar un caso de demanda por incumplimiento de contrato?"
         }
     ]
     

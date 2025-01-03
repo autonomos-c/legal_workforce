@@ -54,6 +54,8 @@ class LegalAgentManager:
             return AgentType.ANALYST
         elif "case" in request.get("context", "").lower() or "management" in request.get("context", "").lower():
             return AgentType.CASE_MANAGER
+        elif "judicial" in request.get("context", "").lower() or "procedimiento" in request.get("context", "").lower():
+            return AgentType.CASE_MANAGER
             
         return AgentType.DIRECTOR  # Default to director
 
