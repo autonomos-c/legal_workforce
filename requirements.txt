@@ -1,0 +1,13 @@
+# Dependencias principales
+langchain>=0.1.0
+langchain-mcp>=0.1.0
+python-dotenv>=1.0.0
+
+# Herramientas de desarrollo
+black>=23.0.0
+mypy>=1.0.0
+pytest>=7.0.0
+
+# Documentación
+mkdocs>=1.0.0
+mkdocs-material>=9.0.0

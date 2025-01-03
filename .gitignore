@@ -1,0 +1,24 @@
+# Entornos virtuales
+venv/
+.env/
+
+# Archivos de Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+
+# Archivos de desarrollo
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Archivos generados
+build/
+dist/
+*.egg-info/
+
+# Archivos de entorno
+.env
+.env.local
