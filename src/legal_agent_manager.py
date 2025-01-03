@@ -7,6 +7,7 @@ class AgentType(Enum):
     SPECIALIST = "specialist"
     ANALYST = "analyst"
     CASE_MANAGER = "case_manager"
+    RISK_ANALYST = "risk_analyst"
 
 class LegalAgentManager:
     def __init__(self):

@@ -8,6 +8,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 from src.legal_agent_manager import LegalAgentManager, AgentType
 from src.director_agent import DirectorAgent
 from src.specialist_agent import SpecialistAgent
+from src.analyst_agent import AnalystAgent
 
 def setup_logging():
     logging.basicConfig(
@@ -24,8 +25,10 @@ def main():
     # Register agents
     director = DirectorAgent()
     specialist = SpecialistAgent()
+    analyst = AnalystAgent()
     manager.register_agent(AgentType.DIRECTOR, director)
     manager.register_agent(AgentType.SPECIALIST, specialist)
+    manager.register_agent(AgentType.ANALYST, analyst)
     
     # Test requests
     test_requests = [
@@ -36,6 +39,10 @@ def main():
         {
             "context": "Derecho civil chileno",
             "question": "¿Cómo redactar un recurso administrativo para un caso de derecho de familia?"
+        },
+        {
+            "context": "Análisis de riesgos legales",
+            "question": "¿Cuáles son los principales riesgos legales al implementar un sistema de IA en el sector financiero?"
         }
     ]
     
