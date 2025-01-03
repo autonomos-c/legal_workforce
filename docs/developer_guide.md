@@ -32,6 +32,14 @@ pip install -r requirements.txt
 pytest --cov=src --cov-report=term-missing
 ```
 
+Los resultados de cobertura se envían automáticamente a Codecov en cada push.
+
+## Verificación de Cobertura
+
+1. Visita https://codecov.io/gh/your-org/legal-agent
+2. Revisa el reporte de cobertura
+3. Verifica que nuevas funcionalidades tengan pruebas adecuadas
+
 ## Contribución
 
 1. Crear nueva rama:

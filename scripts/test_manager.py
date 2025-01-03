@@ -1,6 +1,14 @@
+# Deshabilitar logging completamente antes de cualquier import
+import logging
+logging.disable(logging.CRITICAL)
+
+# Deshabilitar todos los loggers existentes
+for logger_name in logging.root.manager.loggerDict:
+    logging.getLogger(logger_name).disabled = True
+    logging.getLogger(logger_name).propagate = False
+
 import sys
 from pathlib import Path
-import logging
 
 # Agregar directorio raíz al path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -11,17 +19,11 @@ from src.specialist_agent import SpecialistAgent
 from src.analyst_agent import AnalystAgent
 from src.case_manager_agent import CaseManagerAgent
 
-def setup_logging():
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
-
 def main():
-    setup_logging()
     
     # Create manager instance
     manager = LegalAgentManager()
+    print("\n=== Sistema de Agentes Legales AI ===")
     
     # Register agents
     director = DirectorAgent()
@@ -56,8 +58,9 @@ def main():
     for test_request in test_requests:
     
         response = manager.handle_request(test_request)
-        print("\nResponse from manager:")
-        print(response)
+        print(f"\n=== Respuesta del Agente {response['agent_type'].upper()} ===")
+        print(response['content'])
+        print("\n" + "="*50)
 
 if __name__ == "__main__":
     main()
