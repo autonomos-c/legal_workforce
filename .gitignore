@@ -22,3 +22,4 @@ dist/
 # Archivos de entorno
 .env
 .env.local
+api_config_template.env
