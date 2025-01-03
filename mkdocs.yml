@@ -1,0 +1,27 @@
+site_name: Legal Agent Documentation
+site_url: https://your-domain.com
+repo_url: https://github.com/your-org/legal-agent
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.indexes
+    - toc.integrate
+
+nav:
+  - Home: index.md
+  - Developer Guide: developer_guide.md
+  - API Reference:
+    - Groq Integration: api/groq_integration.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/your-org/legal-agent
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
