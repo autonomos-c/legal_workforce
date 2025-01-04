@@ -6,8 +6,7 @@
   },
   
   "features": {
-    "ghcr.io/devcontainers/features/git:1": {},
-    "ghcr.io/devcontainers/features/github-cli:1": {}
+    "ghcr.io/devcontainers/features/git:1": {}
   },
 
   "customizations": {
@@ -15,13 +14,12 @@
       "extensions": [
         "ms-python.python",
         "ms-python.vscode-pylance",
-        "github.vscode-github-actions",
         "saoudrizwan.claude-dev",
         "ms-python.black-formatter",
         "ms-python.isort"
       ],
       "settings": {
-        "python.defaultInterpreterPath": "/workspace/venv/bin/python",
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
         "python.testing.pytestEnabled": true,
         "python.formatting.provider": "black",
         "editor.formatOnSave": true,
@@ -29,10 +27,6 @@
           "source.organizeImports": true
         },
         "claude-dev.mcpServers": {
-          "filesystem": {
-            "command": "npx",
-            "args": ["-y", "@modelcontextprotocol/server-filesystem", "/workspace"]
-          },
           "memory": {
             "command": "npx",
             "args": ["-y", "@modelcontextprotocol/server-memory"]
@@ -43,19 +37,6 @@
             "env": {
               "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
             }
-          },
-          "fetch": {
-            "command": "/workspace/venv/bin/python",
-            "args": ["-m", "mcp_server_fetch"]
-          },
-          "git": {
-            "command": "/workspace/venv/bin/python",
-            "args": [
-              "-m",
-              "mcp_server_git",
-              "--repository",
-              "/workspace"
-            ]
           }
         }
       }
@@ -70,10 +51,5 @@
     "cpus": 4,
     "memory": "8gb",
     "storage": "32gb"
-  },
-
-  "remoteEnv": {
-    "MCP_DIR": "/workspace/Documents/Cline/MCP",
-    "PROJECT_DIR": "/workspace"
   }
 }
