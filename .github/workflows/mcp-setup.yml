@@ -1,21 +1,21 @@
 name: MCP Setup
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
+    inputs:
+      brave_api_key:
+        description: 'Brave Search API Key'
+        required: true
+        type: string
+
+env:
+  BRAVE_API_KEY: ${{ github.event.inputs.brave_api_key }}
+  MCP_DIR: /home/cdm/Documents/Cline/MCP
+  PROJECT_DIR: /home/cdm/legal_agent
 
 jobs:
   setup-mcp:
     runs-on: ubuntu-latest
-    
-    env:
-      BRAVE_API_KEY: ${{ secrets.BRAVE_API_KEY }}
-      MCP_DIR: /home/cdm/Documents/Cline/MCP
-      PROJECT_DIR: /home/cdm/legal_agent
-      
     steps:
     - uses: actions/checkout@v2
     
@@ -29,31 +29,13 @@ jobs:
       with:
         node-version: '18'
         
-    - name: Create MCP directories
+    - name: Install dependencies
       run: |
-        mkdir -p $MCP_DIR
-        mkdir -p $HOME/.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings
-        
-    - name: Install Python dependencies
-      run: |
-        python -m venv $MCP_DIR/venv
-        source $MCP_DIR/venv/bin/activate
-        pip install mcp-server-git mcp-server-fetch
-        
-    - name: Install Node.js dependencies
-      run: |
-        cd $MCP_DIR
-        npm init -y
-        npm install @modelcontextprotocol/server-memory @modelcontextprotocol/server-brave-search
-        
-    - name: Configure environment
-      run: |
-        echo "BRAVE_API_KEY=$BRAVE_API_KEY" > $MCP_DIR/.env
-        echo "MCP_DIR=$MCP_DIR" >> $MCP_DIR/.env
-        echo "PROJECT_DIR=$PROJECT_DIR" >> $MCP_DIR/.env
+        ./setup-mcp.sh
         
     - name: Configure MCP settings
       run: |
+        mkdir -p $HOME/.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings
         cat > $HOME/.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json << EOL
         {
           "mcpServers": {
@@ -79,7 +61,7 @@ jobs:
                 "@modelcontextprotocol/server-brave-search"
               ],
               "env": {
-                "BRAVE_API_KEY": "\${BRAVE_API_KEY}"
+                "BRAVE_API_KEY": "${{ github.event.inputs.brave_api_key }}"
               }
             },
             "fetch": {
@@ -101,7 +83,3 @@ jobs:
           }
         }
         EOL
-        
-    - name: Create backup
-      run: |
-        cp $HOME/.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json $MCP_DIR/mcp_settings_backup.json

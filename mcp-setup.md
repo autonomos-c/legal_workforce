@@ -1,94 +1,73 @@
 # Configuración de MCP Servers
 
-## Requisitos Previos
+## Configuración Inicial
 
-1. VSCode instalado
-2. Extensión Claude instalada
-3. Node.js y npm instalados (para los servidores npm)
-4. Python 3.x y pip instalados (para los servidores Python)
+1. Clonar el repositorio
+2. Ejecutar el script de instalación:
+```bash
+./setup-mcp.sh
+```
 
-## Configuración a través de VSCode
+## Configuración de Secrets
 
-### 1. Configuración de MCP Servers
+### Usando GitHub Actions (Recomendado)
 
-1. Abrir VSCode Settings (Ctrl+,)
-2. Buscar "Claude MCP"
-3. Configurar los servidores a través de la interfaz:
+1. En VSCode, ir a la pestaña GitHub Actions
+2. Seleccionar "MCP Setup"
+3. Hacer clic en "Run workflow"
+4. Ingresar los secrets requeridos:
+   - Brave Search API Key
+   - (Otros secrets según se necesiten)
 
-- **filesystem**: Acceso al sistema de archivos
-- **memory**: Sistema de memoria persistente
-- **brave-search**: Búsqueda web (requiere API key)
-- **fetch**: Obtención de recursos web
-- **git**: Integración con git
+Los secrets se manejarán de forma segura a través de GitHub Actions y se configurarán automáticamente en el sistema.
 
-### 2. Configuración de API Keys
-
-1. En VSCode Settings, expandir la configuración de Claude
-2. Agregar las API keys necesarias de forma segura:
-   - Brave API Key para búsqueda web
-   - Otras API keys según necesidad
-
-### 3. Estructura de Directorios
+## Estructura del Proyecto
 
 ```
 /home/cdm/Documents/Cline/MCP/
 ├── venv/                    # Entorno virtual de Python
-└── node_modules/           # Módulos de Node.js
-```
-
-## Instalación de Dependencias
-
-### Python
-
-```bash
-mkdir -p /home/cdm/Documents/Cline/MCP
-cd /home/cdm/Documents/Cline/MCP
-python3 -m venv venv
-source venv/bin/activate
-pip install mcp-server-git mcp-server-fetch
-```
-
-### Node.js
-
-```bash
-cd /home/cdm/Documents/Cline/MCP
-npm install @modelcontextprotocol/server-memory @modelcontextprotocol/server-brave-search
+├── node_modules/           # Módulos de Node.js
+└── .env                    # Variables de entorno (generado por GitHub Actions)
 ```
 
 ## Verificación
 
-1. Abrir VSCode
-2. Verificar que los MCP servers aparecen en la configuración
-3. Probar cada servidor:
-   - memory: Debería mantener contexto entre conversaciones
-   - brave-search: Debería poder realizar búsquedas web
-   - git: Debería poder interactuar con repositorios
-   - fetch: Debería poder obtener recursos web
+1. Verificar que los MCP servers están configurados:
+   - memory: Sistema de memoria persistente
+   - brave-search: Búsqueda web con API key configurada
+   - git: Integración con git
+   - fetch: Obtención de recursos web
+
+2. Probar funcionalidad:
+   - Realizar una búsqueda con brave-search
+   - Verificar que el sistema de memoria funciona
+   - Comprobar integración con git
 
 ## Solución de Problemas
 
-1. Si los MCP servers no responden:
-   - Verificar que las dependencias están instaladas
-   - Comprobar que las API keys están configuradas correctamente
-   - Revisar los logs de VSCode
+1. Si los secrets no se configuran:
+   - Verificar que el workflow de GitHub Actions se ejecutó correctamente
+   - Revisar los logs del workflow
+   - Asegurar que los secrets fueron ingresados correctamente
 
 2. Si hay problemas de permisos:
    - Verificar permisos de los directorios
-   - Asegurar que los scripts Python son ejecutables
+   - Asegurar que los scripts son ejecutables
 
-## Mejores Prácticas
+## Mantenimiento
 
-1. Seguridad:
-   - Usar la interfaz de VSCode para API keys
-   - No almacenar claves en archivos de texto
-   - Rotar claves periódicamente
+1. Actualización de secrets:
+   - Ejecutar el workflow "MCP Setup" nuevamente
+   - Ingresar los nuevos valores de los secrets
 
-2. Mantenimiento:
-   - Actualizar dependencias regularmente
-   - Mantener VSCode y extensiones actualizados
-   - Documentar cambios en la configuración
+2. Actualización de dependencias:
+```bash
+pip install --upgrade mcp-server-git mcp-server-fetch
+npm update @modelcontextprotocol/server-memory @modelcontextprotocol/server-brave-search
+```
 
-3. Backup:
-   - Exportar configuración de VSCode periódicamente
-   - Mantener registro de API keys en un gestor de contraseñas
-   - Documentar proceso de recuperación
+## Seguridad
+
+- Los secrets se manejan de forma segura a través de GitHub Actions
+- No se almacenan en archivos de texto plano
+- Se pueden actualizar fácilmente cuando sea necesario
