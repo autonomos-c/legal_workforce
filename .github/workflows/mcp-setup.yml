@@ -1,0 +1,107 @@
+name: MCP Setup
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  setup-mcp:
+    runs-on: ubuntu-latest
+    
+    env:
+      BRAVE_API_KEY: ${{ secrets.BRAVE_API_KEY }}
+      MCP_DIR: /home/cdm/Documents/Cline/MCP
+      PROJECT_DIR: /home/cdm/legal_agent
+      
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+        
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+        
+    - name: Create MCP directories
+      run: |
+        mkdir -p $MCP_DIR
+        mkdir -p $HOME/.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings
+        
+    - name: Install Python dependencies
+      run: |
+        python -m venv $MCP_DIR/venv
+        source $MCP_DIR/venv/bin/activate
+        pip install mcp-server-git mcp-server-fetch
+        
+    - name: Install Node.js dependencies
+      run: |
+        cd $MCP_DIR
+        npm init -y
+        npm install @modelcontextprotocol/server-memory @modelcontextprotocol/server-brave-search
+        
+    - name: Configure environment
+      run: |
+        echo "BRAVE_API_KEY=$BRAVE_API_KEY" > $MCP_DIR/.env
+        echo "MCP_DIR=$MCP_DIR" >> $MCP_DIR/.env
+        echo "PROJECT_DIR=$PROJECT_DIR" >> $MCP_DIR/.env
+        
+    - name: Configure MCP settings
+      run: |
+        cat > $HOME/.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json << EOL
+        {
+          "mcpServers": {
+            "filesystem": {
+              "command": "npx",
+              "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem",
+                "/"
+              ]
+            },
+            "memory": {
+              "command": "npx",
+              "args": [
+                "-y",
+                "@modelcontextprotocol/server-memory"
+              ]
+            },
+            "brave-search": {
+              "command": "npx",
+              "args": [
+                "-y",
+                "@modelcontextprotocol/server-brave-search"
+              ],
+              "env": {
+                "BRAVE_API_KEY": "\${BRAVE_API_KEY}"
+              }
+            },
+            "fetch": {
+              "command": "\${MCP_DIR}/venv/bin/python",
+              "args": [
+                "-m",
+                "mcp_server_fetch"
+              ]
+            },
+            "git": {
+              "command": "\${MCP_DIR}/venv/bin/python",
+              "args": [
+                "-m",
+                "mcp_server_git",
+                "--repository",
+                "\${PROJECT_DIR}"
+              ]
+            }
+          }
+        }
+        EOL
+        
+    - name: Create backup
+      run: |
+        cp $HOME/.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json $MCP_DIR/mcp_settings_backup.json

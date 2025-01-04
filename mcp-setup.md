@@ -5,6 +5,7 @@
 1. Node.js y npm instalados
 2. Python 3.x y pip instalados
 3. Entorno virtual de Python configurado
+4. Acceso al repositorio de GitHub (para secrets)
 
 ## Estructura de Directorios
 
@@ -15,7 +16,23 @@
 └── .env                    # Variables de entorno (no versionado)
 ```
 
+## Configuración de GitHub Secrets
+
+1. En GitHub, ir a Settings > Secrets and variables > Actions
+2. Agregar los siguientes secrets:
+   - `BRAVE_API_KEY`: Tu API key de Brave Search
+   - Otros secrets según necesidad
+
 ## Instalación
+
+### Opción 1: Usando GitHub Actions (Recomendado)
+
+1. Los secrets se configuran automáticamente a través de GitHub Actions
+2. El workflow `.github/workflows/mcp-setup.yml` maneja la instalación
+3. Se ejecuta automáticamente en push/pull request a main
+4. También se puede ejecutar manualmente desde la pestaña Actions
+
+### Opción 2: Instalación Local
 
 1. Crear y activar entorno virtual Python:
 ```bash
@@ -36,6 +53,22 @@ npm install @modelcontextprotocol/server-memory @modelcontextprotocol/server-bra
 ```
 
 ## Configuración
+
+### Usando GitHub Secrets (Recomendado)
+
+El script `setup-mcp.sh` intentará obtener los secrets de GitHub primero:
+
+1. Configurar GitHub CLI y autenticarse:
+```bash
+gh auth login
+```
+
+2. Ejecutar el script de configuración:
+```bash
+./setup-mcp.sh
+```
+
+### Configuración Manual
 
 1. Crear archivo `.env`:
 ```env
@@ -95,7 +128,10 @@ Archivo: `~/.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings/clin
 
 ## Variables de Entorno
 
-Crear archivo `.env` en el directorio raíz del proyecto:
+Las variables se obtienen en el siguiente orden:
+1. GitHub Secrets (si están disponibles)
+2. Variables de entorno del sistema
+3. Archivo .env local
 
 ```env
 MCP_DIR=/home/cdm/Documents/Cline/MCP
@@ -114,6 +150,7 @@ npm update @modelcontextprotocol/server-memory @modelcontextprotocol/server-brav
 2. Backup de configuración:
 - Mantener copia de seguridad de `cline_mcp_settings.json`
 - Documentar cualquier cambio en la configuración
+- Los backups se crean automáticamente en el directorio MCP
 
 ## Solución de Problemas
 
@@ -121,24 +158,29 @@ npm update @modelcontextprotocol/server-memory @modelcontextprotocol/server-brav
 - Verificar que el entorno virtual está activado
 - Confirmar que las variables de entorno están configuradas
 - Revisar los logs de VSCode
+- Verificar acceso a GitHub Secrets
 
 2. Si hay problemas de permisos:
 - Verificar permisos de los directorios
 - Asegurar que los scripts Python son ejecutables
+- Confirmar acceso a GitHub
 
 ## Mejores Prácticas
 
 1. Control de Versiones:
+- Usar GitHub Secrets para información sensible
 - Versionar los archivos de configuración template
 - NO versionar archivos con información sensible (.env)
 - Mantener documentación actualizada
 
 2. Seguridad:
-- Usar variables de entorno para claves API
+- Usar GitHub Secrets para claves API
 - Rotar claves periódicamente
 - Limitar permisos de acceso
+- Revisar accesos a secrets regularmente
 
 3. Mantenimiento:
 - Actualizar dependencias regularmente
 - Mantener copias de seguridad de configuración
 - Documentar cambios y problemas conocidos
+- Revisar y actualizar GitHub Secrets según necesidad

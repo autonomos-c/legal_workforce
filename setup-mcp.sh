@@ -12,6 +12,22 @@ CONFIG_DIR="$HOME/.config/Code/User/globalStorage/saoudrizwan.claude-dev/setting
 
 echo -e "${YELLOW}Configurando MCP Servers...${NC}"
 
+# Verificar GitHub CLI
+if command -v gh &> /dev/null; then
+    echo "Intentando obtener secrets desde GitHub..."
+    if gh auth status &> /dev/null; then
+        # Intentar obtener BRAVE_API_KEY de GitHub Secrets
+        BRAVE_API_KEY=$(gh secret list | grep BRAVE_API_KEY &> /dev/null && gh secret get BRAVE_API_KEY)
+        if [ ! -z "$BRAVE_API_KEY" ]; then
+            echo "Secret BRAVE_API_KEY obtenido de GitHub"
+        fi
+    else
+        echo "GitHub CLI no autenticado. Ejecuta 'gh auth login' primero si quieres usar GitHub Secrets"
+    fi
+else
+    echo "GitHub CLI no encontrado. Se usarán variables de entorno locales"
+fi
+
 # Crear directorios necesarios
 echo "Creando directorios..."
 mkdir -p "$MCP_DIR"
@@ -44,14 +60,21 @@ echo "Instalando dependencias npm..."
 npm init -y
 npm install @modelcontextprotocol/server-memory @modelcontextprotocol/server-brave-search
 
-# Solicitar Brave API Key si no existe
-if [ ! -f "$MCP_DIR/.env" ]; then
-    echo -e "${YELLOW}Ingrese su Brave API Key:${NC}"
-    read -r brave_key
-    echo "BRAVE_API_KEY=$brave_key" > "$MCP_DIR/.env"
-    echo "MCP_DIR=$MCP_DIR" >> "$MCP_DIR/.env"
-    echo "PROJECT_DIR=/home/cdm/legal_agent" >> "$MCP_DIR/.env"
+# Configurar variables de entorno si no se obtuvieron de GitHub
+if [ -z "$BRAVE_API_KEY" ]; then
+    if [ ! -f "$MCP_DIR/.env" ]; then
+        echo -e "${YELLOW}Ingrese su Brave API Key:${NC}"
+        read -r brave_key
+        BRAVE_API_KEY=$brave_key
+    else
+        source "$MCP_DIR/.env"
+    fi
 fi
+
+# Guardar variables de entorno
+echo "BRAVE_API_KEY=$BRAVE_API_KEY" > "$MCP_DIR/.env"
+echo "MCP_DIR=$MCP_DIR" >> "$MCP_DIR/.env"
+echo "PROJECT_DIR=/home/cdm/legal_agent" >> "$MCP_DIR/.env"
 
 # Crear archivo de configuración MCP
 echo "Configurando MCP settings..."
@@ -112,5 +135,8 @@ echo -e "${YELLOW}Importante:${NC}"
 echo "1. La configuración se ha guardado en: $CONFIG_DIR/cline_mcp_settings.json"
 echo "2. Un backup se ha creado en: $MCP_DIR/mcp_settings_backup.json"
 echo "3. Las variables de entorno están en: $MCP_DIR/.env"
+if ! command -v gh &> /dev/null; then
+    echo -e "${YELLOW}Recomendación:${NC} Instala GitHub CLI (gh) para usar GitHub Secrets"
+fi
 echo -e "${YELLOW}Para activar el entorno en nuevas sesiones:${NC}"
 echo "source $MCP_DIR/venv/bin/activate"
