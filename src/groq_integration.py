@@ -3,8 +3,8 @@ import logging
 from groq import Groq
 
 class GroqIntegration:
-    def __init__(self):
-        self.api_key = os.getenv('GROQ_API_KEY')
+    def __init__(self, api_key=None):
+        self.api_key = api_key or os.getenv('GROQ_API_KEY')
         if not self.api_key:
             raise ValueError("GROQ_API_KEY no está configurado")
         

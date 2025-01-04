@@ -1,25 +1,35 @@
 import pytest
+from unittest.mock import patch, MagicMock
 from src.groq_integration import GroqIntegration
 
 class TestGroqIntegration:
-    def test_initialization(self):
-        # Prueba de inicialización básica
-        with pytest.raises(ValueError):
-            groq = GroqIntegration()  # Debería fallar sin API_KEY
-            
-    def test_get_chat_completion(self, monkeypatch):
-        # Mock de la API para pruebas
-        def mock_chat_completion(*args, **kwargs):
-            class MockResponse:
-                def __init__(self):
-                    self.choices = [type('obj', (object,), {'message': type('obj', (object,), {'content': 'Mock response'})})]
-            
-            return MockResponse()
-
-        monkeypatch.setenv('GROQ_API_KEY', 'test_key')
-        monkeypatch.setattr('groq.Groq.chat.completions.create', mock_chat_completion)
+    def test_initialization_without_key(self, monkeypatch):
+        # Deshabilitar variable de entorno
+        monkeypatch.delenv('GROQ_API_KEY', raising=False)
         
-        groq = GroqIntegration()
+        # Prueba de inicialización sin API_KEY
+        with pytest.raises(ValueError):
+            GroqIntegration()
+
+    def test_initialization_with_key(self):
+        # Prueba de inicialización con API_KEY
+        groq = GroqIntegration(api_key='test_key')
+        assert groq is not None
+
+    @patch('src.groq_integration.Groq')
+    def test_get_chat_completion(self, mock_groq):
+        # Configurar mock
+        mock_client = MagicMock()
+        mock_response = MagicMock()
+        mock_response.choices = [MagicMock()]
+        mock_response.choices[0].message.content = 'Mock response'
+        
+        mock_client.chat.completions.create.return_value = mock_response
+        mock_groq.return_value = mock_client
+
+        # Instanciar y probar
+        groq = GroqIntegration(api_key='test_key')
         response = groq.get_chat_completion([{"role": "user", "content": "test"}])
         
         assert response == "Mock response"
+        mock_client.chat.completions.create.assert_called_once()
