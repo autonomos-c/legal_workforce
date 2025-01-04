@@ -23,3 +23,15 @@ dist/
 .env
 .env.local
 api_config_template.env
+
+# MCP específico
+mcp_settings_backup.json
+.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json
+Documents/Cline/MCP/node_modules/
+Documents/Cline/MCP/.env
+Documents/Cline/MCP/package-lock.json
+
+# Base de datos y archivos temporales
+legal_agent_memory.db
+temp.index
+.coverage
