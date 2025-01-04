@@ -10,22 +10,33 @@ Legal Agent es una herramienta para asistencia legal utilizando modelos de lengu
 
 - Integración con Groq API
 - Manejo de contexto legal
-- Configuración modular
-- Documentación automatizada
+- Sistema de memoria persistente
+- Configuración automatizada con devcontainer
+- Soporte para GitHub Codespaces
 
 ## Primeros pasos
 
+1. Clonar el repositorio:
 ```bash
-# Clonar el repositorio
-git clone https://github.com/your-org/legal-agent.git
-
-# Configurar entorno
-cp api_config_template.env .env
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+git clone https://github.com/autonomos-c/c_assistant.git
 ```
 
-## Contribuir
+2. Abrir en VSCode:
+   - VSCode detectará automáticamente la configuración del devcontainer
+   - Click en "Reopen in Container" cuando aparezca la notificación
 
-Ver [Developer Guide](developer_guide.md) para instrucciones detalladas.
+O usar GitHub Codespaces:
+1. Ir al repositorio en GitHub
+2. Click en "Code" > "Open with Codespaces"
+3. Seleccionar la configuración (4 cores, 16GB RAM recomendado)
+
+## Desarrollo
+
+- La configuración del entorno es automática a través del devcontainer
+- Los MCP servers mantienen el contexto del desarrollo
+- CI/CD automatizado con GitHub Actions
+
+## Documentación
+
+- [Developer Guide](developer_guide.md) - Guía detallada para desarrolladores
+- [Groq Integration](api/groq_integration.md) - Documentación de la integración con Groq
