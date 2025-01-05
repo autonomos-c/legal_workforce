@@ -1,4 +1,4 @@
-c # Dependencias principales
+# Dependencias principales
 groq>=0.0.2
 python-dotenv>=1.0.0
 loguru>=0.7.2
