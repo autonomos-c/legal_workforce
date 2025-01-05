@@ -4,11 +4,9 @@
 
 ```
 legal_agent/
-├── .devcontainer/     # Configuración de desarrollo
 ├── src/               # Código fuente principal
 ├── tests/             # Pruebas unitarias
 ├── docs/              # Documentación
-├── .github/           # Configuración de GitHub Actions
 └── mkdocs.yml         # Configuración de documentación
 ```
 
@@ -16,60 +14,55 @@ legal_agent/
 
 ### Usando GitHub Codespaces (Recomendado)
 
-1. Abrir en Codespaces:
+1. Configurar Secrets:
+   - En GitHub: Settings > Secrets and variables > Codespaces
+   - Agregar GROQ_API_KEY y BRAVE_API_KEY
+   - Ver docs/codespace_setup.md para más detalles
+
+2. Crear Codespace:
    - Ir al repositorio en GitHub
    - Click en "Code" > "Open with Codespaces"
-   - Seleccionar configuración (4 cores, 16GB RAM)
+   - Seleccionar configuración (4 cores)
 
-2. Todo se configura automáticamente:
-   - Dependencias de Python
-   - Herramientas de desarrollo
-   - MCP servers
-   - Extensiones de VSCode
+3. El sistema usará:
+   - Secrets como variables de entorno
+   - pip para gestión de dependencias
+   - Extensiones de VSCode necesarias
 
 ### Usando VSCode Local
 
-1. Abrir en VSCode:
-   - VSCode detectará el devcontainer
-   - Click en "Reopen in Container"
+1. Configurar entorno:
+   - Copiar .env.example a .env
+   - Agregar API keys al .env
+   - Instalar Python 3.11+
 
-2. El contenedor se construirá automáticamente con:
-   - Python 3.11
-   - Todas las dependencias
-   - Herramientas de desarrollo
+2. Instalar dependencias:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ## Desarrollo
 
 ### MCP Servers
 
-Los MCP servers mantienen el contexto del desarrollo:
-- memory: Mantiene el historial y estado del proyecto
-- git: Integración con el repositorio
-- brave-search: Búsqueda de documentación
-- fetch: Obtención de recursos
+Los MCP servers proporcionan funcionalidades adicionales:
+- memory: Mantiene el historial y estado
+- brave-search: Búsqueda web (requiere BRAVE_API_KEY)
 
 ### Pruebas
 
-Las pruebas se ejecutan automáticamente en GitHub Actions:
+Ejecutar pruebas localmente:
 ```bash
 pytest --cov=src --cov-report=term-missing
 ```
 
 ### Linting y Formateo
 
-El código se formatea automáticamente al guardar:
+Herramientas de desarrollo:
 - black: Formateo de Python
 - isort: Organización de imports
 - flake8: Linting
 - mypy: Verificación de tipos
-
-## CI/CD
-
-GitHub Actions ejecuta automáticamente:
-1. Pruebas unitarias
-2. Cobertura de código
-3. Linting y verificación de tipos
-4. Construcción de documentación
 
 ## Contribución
 
@@ -78,12 +71,12 @@ GitHub Actions ejecuta automáticamente:
 git checkout -b feature/nueva-funcionalidad
 ```
 
-2. Desarrollar con devcontainer:
-   - El entorno está configurado automáticamente
-   - Los linters se ejecutan al guardar
-   - Las pruebas se pueden ejecutar localmente
+2. Desarrollar:
+   - Instalar dependencias con pip
+   - Ejecutar pruebas localmente
+   - Seguir guías de estilo de código
 
 3. Crear pull request:
-   - GitHub Actions verificará todo automáticamente
-   - La cobertura de código se reporta en Codecov
-   - Los cambios deben pasar todas las verificaciones
+   - Describir cambios claramente
+   - Asegurar que las pruebas pasen
+   - Mantener el código limpio y documentado
