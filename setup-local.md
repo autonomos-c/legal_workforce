@@ -1,6 +1,6 @@
 # Configuración Local del Proyecto
 
-## Usando Variables de Entorno (.env)
+## Preparación Inicial
 
 1. Crea un archivo .env en la raíz del proyecto:
 ```bash
@@ -11,23 +11,18 @@ cp .env.example .env
 - GROQ_API_KEY: Obtén tu key en https://console.groq.com
 - BRAVE_API_KEY: Obtén tu key en https://brave.com/search/api/
 
-## Reconstruir el Codespace
+## Crear Nuevo Codespace
 
-1. Asegúrate de tener el archivo .env configurado
-2. Elimina el codespace actual:
-   - En VSCode: Remote Explorer > Click derecho > Delete
-   - O en GitHub: Settings > Codespaces > Delete
-
-3. Crea un nuevo codespace:
-   - En GitHub: Code > Codespaces > Create codespace
+1. En GitHub:
+   - Code > Codespaces > Create codespace
    - Selecciona:
      * Branch: main
      * Machine type: 4-core
 
-4. El sistema automáticamente:
-   - Leerá las variables del .env
+2. El sistema automáticamente:
+   - Configurará el entorno básico
    - Instalará dependencias
-   - Configurará el entorno
+   - Mantendrá el MCP memory server
 
 ## Verificar la Configuración
 
@@ -54,6 +49,6 @@ cat .env  # Debería mostrar tus API keys
 echo $GROQ_API_KEY  # Debería mostrar tu key
 ```
 
-3. Reinicia el contenedor si es necesario:
-   - Command Palette (Ctrl+Shift+P)
-   - "Remote-Containers: Rebuild Container"
+3. Si es necesario, reinstala las dependencias:
+```bash
+pip install -r requirements.txt
