@@ -12,34 +12,24 @@ legal_agent/
 
 ## Configuración del Entorno
 
-### Usando GitHub Codespaces (Recomendado)
+### Desarrollo Local (Recomendado)
 
-1. Configurar Secrets:
-   - En GitHub: Settings > Secrets and variables > Codespaces
-   - Agregar GROQ_API_KEY y BRAVE_API_KEY
-   - Ver docs/codespace_setup.md para más detalles
+Ver [Guía de Configuración Local](local_setup.md) para instrucciones detalladas sobre:
+- Configuración inicial
+- Instalación de dependencias
+- Configuración de VSCode y MCP
+- Flujo de trabajo con Git
+- Mantenimiento del entorno
 
-2. Crear Codespace:
-   - Ir al repositorio en GitHub
-   - Click en "Code" > "Open with Codespaces"
-   - Seleccionar configuración (4 cores)
+### Usando GitHub Codespaces (Alternativo)
 
-3. El sistema usará:
-   - Secrets como variables de entorno
-   - pip para gestión de dependencias
-   - Extensiones de VSCode necesarias
+Para desarrollo en la nube, ver [Configuración de Codespaces](codespace_setup.md).
 
-### Usando VSCode Local
-
-1. Configurar entorno:
-   - Copiar .env.example a .env
-   - Agregar API keys al .env
-   - Instalar Python 3.11+
-
-2. Instalar dependencias:
-   ```bash
-   pip install -r requirements.txt
-   ```
+Nota: El desarrollo local es recomendado por:
+- Mejor rendimiento
+- Control total del entorno
+- Sin limitaciones de recursos
+- Desarrollo más fluido
 
 ## Desarrollo
 
