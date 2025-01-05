@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     
@@ -25,13 +25,13 @@ jobs:
     - name: Run linting
       run: |
         pip install black flake8
-        black . --check || true  # No fallar por formato
-        flake8 . || true  # No fallar por estilo
+        black . --check
+        flake8 .
     
     - name: Run basic tests
       run: |
         pip install pytest
-        python -m pytest tests/ -v -k "not test_groq_integration and not test_environment" || true  # No fallar por tests iniciales
+        pytest tests/ -v -k "not test_groq_integration and not test_environment"
 
   docs:
     runs-on: ubuntu-latest
