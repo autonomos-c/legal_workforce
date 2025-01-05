@@ -8,7 +8,7 @@ Los Codespaces son entornos de desarrollo efímeros, lo que significa que:
 3. Las dependencias necesitan reinstalarse
 4. La configuración de MCP servers se pierde
 
-## Solución: Codespace Secrets
+## Solución: Codespace Secrets y MCP
 
 Para mantener la configuración entre sesiones:
 
@@ -24,12 +24,35 @@ Para mantener la configuración entre sesiones:
    - Son seguros y encriptados
    - No se pierden al reiniciar
 
+3. Configurar MCP Servers:
+   - Ubicación: ~/.vscode-remote/data/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json
+   - Contenido necesario:
+     ```json
+     {
+       "mcpServers": {
+         "memory": {
+           "command": "npx",
+           "args": ["-y", "@modelcontextprotocol/server-memory"]
+         },
+         "brave-search": {
+           "command": "npx",
+           "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+           "env": {
+             "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
+           }
+         }
+       }
+     }
+     ```
+   - Esta configuración persiste entre sesiones
+
 ## Proceso de Desarrollo
 
 1. Primera vez:
    a. Configurar Codespace Secrets en GitHub
-   b. Crear nuevo codespace desde main
-   c. El sistema se configurará automáticamente
+   b. Verificar configuración de MCP servers
+   c. Crear nuevo codespace desde main
+   d. El sistema se configurará automáticamente
 
 2. En cada sesión:
    - Los secrets estarán disponibles como variables de entorno
@@ -58,9 +81,15 @@ Si no hay errores, los secrets están configurados correctamente.
    - Recrear el codespace si es necesario
 
 2. Si los MCP servers no funcionan:
-   - Verificar que las extensiones están instaladas
-   - Reinstalar dependencias si es necesario:
+   - Verificar cline_mcp_settings.json
+   - Asegurar que el contenido es correcto
+   - Reinstalar extensiones si es necesario:
      ```bash
+     code --install-extension saoudrizwan.claude-dev
+     ```
+   - Reinstalar dependencias:
+     ```bash
+     npm install -g @modelcontextprotocol/server-memory @modelcontextprotocol/server-brave-search
      pip install -r requirements.txt
      ```
 
