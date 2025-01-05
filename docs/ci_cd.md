@@ -51,9 +51,15 @@ El workflow se ejecuta en:
    pytest tests/ -v -k "not test_groq_integration and not test_environment"
    ```
 
-3. El linting es obligatorio:
-   - black para formateo
-   - flake8 para verificación de estilo
+3. Estado Inicial del CI:
+   - Los checks de linting son informativos (no fallan el build)
+   - Los tests básicos son informativos (no fallan el build)
+   - Esta configuración es temporal durante el setup inicial
+
+4. Configuración Futura:
+   - El linting será obligatorio
+   - Los tests básicos deberán pasar
+   - Se agregarán más verificaciones
 
 ## Solución de Problemas
 
