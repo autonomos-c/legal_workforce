@@ -52,11 +52,31 @@ Para mantener la configuración entre sesiones:
    a. Configurar Codespace Secrets en GitHub
    b. Verificar configuración de MCP servers
    c. Crear nuevo codespace desde main
-   d. El sistema se configurará automáticamente
+   d. Instalar herramientas básicas:
+      ```bash
+      sudo apt-get update && sudo apt-get install -y python3-pip
+      ```
+   e. Instalar extensiones requeridas:
+      ```bash
+      code --install-extension ms-python.black-formatter
+      code --install-extension ms-python.isort
+      ```
+   f. Instalar dependencias:
+      ```bash
+      pip install -r requirements.txt
+      npm install -g @modelcontextprotocol/server-memory @modelcontextprotocol/server-brave-search
+      ```
 
-2. En cada sesión:
+2. En cada sesión nueva:
    - Los secrets estarán disponibles como variables de entorno
-   - pip install -r requirements.txt instalará dependencias
+   - Verificar que pip está instalado:
+     ```bash
+     which pip || sudo apt-get install -y python3-pip
+     ```
+   - Reinstalar dependencias si es necesario:
+     ```bash
+     pip install -r requirements.txt
+     ```
    - Los MCP servers usarán las API keys de los secrets
 
 3. Al reiniciar/recrear:
